@@ -47,29 +47,28 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
   
 def get_image_embeddings(imageUrl):  
-    cogSvcsEndpoint = os.environ["COGNITIVE_SERVICES_ENDPOINT"]  
+    cogSvcsEndpoint = os.environ["COGNITIVE_SERVICES_ENDPOINT"]
     cogSvcsApiKey = os.environ["COGNITIVE_SERVICES_API_KEY"]  
-  
+
     url = f"{cogSvcsEndpoint}/computervision/retrieval:vectorizeImage"  
-  
+
     params = {  
         "api-version": "2023-02-01-preview"  
     }  
-  
+
     headers = {  
         "Content-Type": "application/json",  
         "Ocp-Apim-Subscription-Key": cogSvcsApiKey  
     }  
-  
+
     data = {  
         "url": imageUrl  
     }  
-  
+
     response = requests.post(url, params=params, headers=headers, json=data)  
-  
+
     if response.status_code != 200:  
         logging.error(f"Error: {response.status_code}, {response.text}")  
         response.raise_for_status()  
-  
-    embeddings = response.json()["vector"]  
-    return embeddings  
+
+    return response.json()["vector"]  
